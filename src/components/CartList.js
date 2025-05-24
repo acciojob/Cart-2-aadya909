@@ -1,39 +1,28 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { products } from '../data/products';
 import CartItem from './CartItem';
 
 const CartList = () => {
   const { state, dispatch } = useCart();
 
-  const handleClear = () => dispatch({ type: 'CLEAR_CART' });
-
-  const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  if (state.items.length === 0) {
+    return <p>Cart is currently empty</p>;
+  }
 
   return (
-    <div>
-      {state.items.length === 0 ? (
-        <p>Cart is currently empty</p>
-      ) : (
-        <>
-          <ul id="cart-items-list">
-            {state.items.map(item => (
-              <CartItem key={item.id} item={item} />
-            ))}
-          </ul>
-          <button id="clear-all-cart" onClick={handleClear}>Clear Cart</button>
-          <p>Total: $<span id="cart-total-amount">{total}</span></p>
-        </>
-      )}
-
-      <h3>Products</h3>
-      {products.map(product => (
-        <button key={product.id} onClick={() => dispatch({ type: 'ADD_ITEM', payload: product })}>
-          Add {product.name}
-        </button>
-      ))}
-    </div>
+    <>
+      <div id="cart-items-list"> {/* ✅ REQUIRED for Cypress */}
+        {state.items.map(item => (
+          <CartItem key={item.id} item={item} dispatch={dispatch} />
+        ))}
+      </div>
+      <button id="clear-all-cart" onClick={() => dispatch({ type: 'CLEAR_CART' })}>
+        Clear Cart
+      </button>
+      <p>Total: $<span id="cart-total-amount">{state.items.reduce((total, item) => total + item.price * item.quantity, 0)}</span></p>
+    </>
   );
 };
 
 export default CartList;
+
