@@ -1,19 +1,37 @@
 import React from 'react';
-import { useCart } from '../context/CartContext';
 
-const CartItem = ({ item }) => {
-  const { dispatch } = useCart();
+const CartItem = ({ item, dispatch }) => {
+  const { id, name, price, quantity } = item;
 
   return (
-    <li>
-      {item.name} - $
-      <span id={`cart-item-price-${item.id}`}>{item.price}</span> x
-      <span id={`cart-amount-${item.id}`}> {item.quantity} </span>
-      <button id={`increment-btn-${item.id}`} onClick={() => dispatch({ type: 'INCREMENT', payload: item.id })}>+</button>
-      <button id={`decrement-btn-${item.id}`} onClick={() => dispatch({ type: 'DECREMENT', payload: item.id })}>-</button>
-      <button onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item.id })}>Remove</button>
-    </li>
+    <div>
+      <h3>{name}</h3>
+      <p id={`cart-item-price-${id}`}>${price}</p>
+
+      <div>
+        <button
+          id={`decrement-btn-${id}`}
+          onClick={() => dispatch({ type: 'DECREMENT', payload: id })}
+        >
+          -
+        </button>
+
+        <span id={`cart-amount-${id}`}>{quantity}</span>
+
+        <button
+          id={`increment-btn-${id}`}
+          onClick={() => dispatch({ type: 'INCREMENT', payload: id })}
+        >
+          +
+        </button>
+      </div>
+
+      <button onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: id })}>
+        Remove
+      </button>
+    </div>
   );
 };
 
 export default CartItem;
+

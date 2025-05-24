@@ -24,22 +24,24 @@ function reducer(state, action) {
       };
 
     case 'INCREMENT':
-      return {
-        ...state,
-        items: state.items.map(item =>
-          item.id === action.payload ? { ...item, quantity: item.quantity + 1 } : item
-        )
-      };
+  return {
+    ...state,
+    items: state.items.map(item =>
+      item.id === action.payload
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    ),
+  };
 
-    case 'DECREMENT':
-      return {
-        ...state,
-        items: state.items
-          .map(item =>
-            item.id === action.payload ? { ...item, quantity: item.quantity - 1 } : item
-          )
-          .filter(item => item.quantity > 0)
-      };
+case 'DECREMENT':
+  return {
+    ...state,
+    items: state.items.map(item =>
+      item.id === action.payload && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    ),
+  };
 
     case 'REMOVE_ITEM':
       return {
